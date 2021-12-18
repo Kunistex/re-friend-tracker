@@ -138,7 +138,7 @@ export class GuiModel {
                             "type": "text",
                             "name": "Comments",
                             "width": 2,
-                            "height": 4,
+                            "height": 5,
                             "maxLength": 5000,
                         },
                         {
