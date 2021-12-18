@@ -1,3 +1,6 @@
+import { TemplateUseTrackByFunctionRule } from "codelyzer";
+import { getParseTreeNode } from "typescript";
+
 export class GuiModel {
 
     /* HINWEIS: Texte sind in der Datei ../example-translation-service.ts definiert.
@@ -6,11 +9,11 @@ export class GuiModel {
 
     private _guiModel = {
         "application": {
-            "title": "Requirements Engineering Friend Tracker",
+            "title": "Stefan Sabans new Friend Tracker",
             "formList": [
                 {
                     "id": "FriendForm",
-                    "title": "Friend",
+                    "title": "Friends",
                     "url": "/friend",
                     "formFieldList": [
                         {
@@ -27,6 +30,20 @@ export class GuiModel {
                             "width": 1,
                             "required": true
                         },
+                        {   "id": "nickname",
+                            "type": "text",
+                            "name": "Nickname",
+                            "width": 2,
+                            "required": true
+                        },
+                        {
+                            "id": "group",
+                            "type": "autocomplete",
+                            "name": "Group",
+                            "url": "/group",
+                            "form": "Groupform",
+                            "width": 2
+                        },
                         {
                             "id":   "location",
                             "type": "autocomplete",
@@ -40,6 +57,47 @@ export class GuiModel {
                             "type": "date",
                             "name": "Birthday",
                             "width": 2
+                        },
+                        {
+                            "id": "comment",
+                            "type": "text",
+                            "name": "Comments",
+                            "width": 2,
+                            "height": 4,
+                            "maxLength": 5000,
+                        },
+                        {
+                            "type": "deleteButton",
+                            "name": "Delete"
+                        },
+                        {
+                            "type": "cancelButton",
+                            "name": "Cancel"
+                        },
+                        {
+                            "type": "okButton",
+                            "name": "Ok"
+                        }   
+                    ]
+                },
+                {
+                    "id": "GroupForm",
+                    "title": "Group",
+                    "url": "/group",
+                    "formFieldList": [
+                        {
+                            "id": "name",
+                            "type": "text",
+                            "name": "GroupName",
+                            "width": 2,
+                            "required": true
+                        },
+                        {
+                            "id":"creationdate",
+                            "type": "date",
+                            "name": "CreationDate",
+                            "width": 2
+    
                         },
                         {
                             "id": "comment",
@@ -76,6 +134,14 @@ export class GuiModel {
                             "required": true
                         },
                         {
+                            "id": "comment",
+                            "type": "text",
+                            "name": "Comments",
+                            "width": 2,
+                            "height": 4,
+                            "maxLength": 5000,
+                        },
+                        {
                             "type": "deleteButton",
                             "name": "Delete"
                         },
@@ -105,6 +171,28 @@ export class GuiModel {
                             "width": 2
                         },
                         {
+                            "id": "name",
+                            "type": "text",
+                            "name": "LocationName",
+                            "width": 2,
+                            "required": true
+                        },
+                        {
+                            "id":"activitydate",
+                            "type": "date",
+                            "name": "Date",
+                            "width": 2
+    
+                        },
+                        {
+                            "id": "comment",
+                            "type": "text",
+                            "name": "Comments",
+                            "width": 2,
+                            "height": 4,
+                            "maxLength": 5000,
+                        },
+                        {
                             "type": "deleteButton",
                             "name": "Delete"
                         },
@@ -120,6 +208,90 @@ export class GuiModel {
                 },
             ],
             "pageList": [
+            {
+                    "id": "groupspage",
+                    "elementList": [
+                        {
+                            "type": "backbutton",
+                        },
+                        {
+                            "type": "newButton",
+                            "name": "NewGroup",
+                            "icon": "fa-weixin",
+                            "color": "orange",
+                            "form": {
+                                "form": "GroupForm"
+                            }
+                        },
+                        {
+                            "type": "list",
+                            "icon": "fa-weixin",
+                            "color": "emerald",
+                            "search": true,
+                            "url": "/group",
+                            "form": {
+                                "form": "GroupForm"
+                            }
+                        },
+                    ]
+                },
+                {
+                    "id": "editpage",
+                    "elementList": [
+                        {
+                            "type": "backbutton",
+                        },
+                        {
+                            "type": "newButton",
+                            "name": "EditFriend",
+                            "icon": "fa-home",
+                            "color": "green",
+                            "form": {
+                                "form": "FriendForm"
+                            },
+                        },
+                        {
+                            "type": "newButton",
+                            "name": "AddActivity",
+                            "icon": "fa-home",
+                            "color": "green",
+                            "url": "/activity",
+                            "form": {
+                                "form": "AddActivityForm"
+                            },
+                        },
+                        {
+                            "type": "list",
+                            "page": "editpage",
+                            "icon": "fa-user",
+                            "color": "orange",
+                            "search": true,
+                            "url": "/activity",
+                            "form": {
+                                "form": "AddActivityForm"
+                            },
+                        },
+                    ]
+                },
+                {
+                    "id": "activitypage",
+                    "elementList": [
+                        {
+                            "type": "backbutton"
+                        },
+                        {
+                            "type": "list",
+                            "page": "activitypage",
+                            "icon": "fa-basektball-ball",
+                            "color": "orange",
+                            "search": true,
+                            "url": "/activity",
+                            "form": {
+                                "form": "AddActivityForm"
+                            }
+                        },
+                    ]
+                },
                 {
                     "id": "mainmenu",
                     "name": "MainMenu",
@@ -137,6 +309,20 @@ export class GuiModel {
                             "icon": "fa-cubes",
                             "color": "yellow",
                             "page": "locationspage",
+                        },
+                        {   
+                            "type": "button",
+                            "name": "Groups",
+                            "icon": "fa-weixin",
+                            "color": "magenta",
+                            "page": "groupspage",
+                        },
+                        {
+                            "type": "button",
+                            "name": "Activities",
+                            "icon": "fa-basketball-ball",
+                            "color": "orange",
+                            "page": "activitypage"
                         },
                     ]
                 },
@@ -157,6 +343,7 @@ export class GuiModel {
                         },
                         {
                             "type": "list",
+                            "page": "editpage",
                             "icon": "fa-user",
                             "color": "blue",
                             "search": true,
@@ -164,7 +351,7 @@ export class GuiModel {
                             "form": {
                                 "form": "FriendForm"
                             }
-                        },
+                        }, 
                     ]
                 },
                 {
@@ -178,9 +365,8 @@ export class GuiModel {
                             "name": "NewLocation",
                             "icon": "fa-home",
                             "color": "green",
-                            "width": 2,
                             "form": {
-                                "form": "LocationForm"
+                                "form": "Locationform"
                             }
                         },
                         {
@@ -190,14 +376,14 @@ export class GuiModel {
                             "search": true,
                             "url": "/location",
                             "form": {
-                                "form": "LocationForm"
+                                "form": "AddActivityForm"
                             }
                         },
                     ]
                 },
             ]
-        }
-    };
+        },
+    }
 
 
     get guiModel() {
